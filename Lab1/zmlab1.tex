@@ -1,0 +1,157 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts} 
+\newtheorem{thm}{Twierdzenie}
+\newtheorem{defin}{Definicja}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\newtheorem{prz}{Przykłady}
+\usepackage{multicol}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+
+\begin{document}
+
+
+\section*{Błędy i arytmetyka zmiennopozycyjna}
+
+\subsection*{Zadania}
+\begin{enumerate}
+
+
+\item Oblicz:
+\begin{itemize}
+	\item $(0.1+0.2)+0.3$ oraz $0.1+(0.2+0.3)$
+	\item $(0.1*0.6)*0.7$ oraz $0.1*(0.6*0.7)$,
+	\item $0.1*(0.7-0.6)$ oraz $0.1*0.7-0.1*0.6$
+\end{itemize}
+Porównaj otrzymane wyniki.
+
+\item Niech $a=1+eps,b=1+\frac{eps}{2}$. Które z tych liczb są równe $1$ w arytmetyce zmiennopozycyjnej? Czy liczby $a-1$ i $b-1$ są równe $0$? Czy $\frac{eps}{2}=0$?
+
+
+\item Napisz skrypt zliczający sumę argumentów $0.1$ do momentu, gdy otrzymana wartość wyniesie $2$. Wykorzystaj pętlę while i dwa różne warunki stopu:
+\begin{enumerate}
+	\item $while \; suma<>2$,
+	\item $ while \; abs(suma-2)>0.001$.
+\end{enumerate}
+Czy w obu przypadkach otrzymamy to samo?
+
+\item Zdefinujmy ciąg całek wzorem 
+$$y_n=\int^1_0 \frac{x^n}{x+5} dx$$
+Ciąg ten spełnia zależność rekurencyjną $y_n+5y_{n-1}=\frac{1}{n}$. Korzystając z tej zależności chcemy obliczyć wartości poszczególnych całek.
+\begin{enumerate}
+	\item Napisz skrypt, który oblicza przybliżone wartości całek $y_1,\ldots,y_8$, wykorzystując wzór rekurencyjny $y_n=\frac{1}{n}-5y_{n-1}$ oraz początkowe przybliżenie całki $y_0\approx0.182$.
+	\item Napisz skrypt, który oblicza przybliżone wartości całek $y_7,\ldots,y_0$, wykorzystując wzór rekurencyjny $y_{n-1}=\frac{1}{5n}-\frac{1}{5}y_n$oraz początkowe przybliżenie całki  $y_8\approx 0.019$.
+	\item Porównaj otrzymane w powyższych punktach wyniki i spróbuj wyjaśnić powstałe różnice.
+\end{enumerate}
+
+\item Dla $x=8^{-1},8^{-2},\ldots,8^{-10}$ oblicz wartości funkcji:
+\begin{itemize}
+	\item $f(x)=\sqrt{x^2+1}-1$,
+	\item $g(x)=\frac{x^2}{\sqrt{x^2+1}-1}$.
+\end{itemize}
+Porównaj otrzymana wartości.
+
+\item Rozważmy funkcję $f(x)=\sin(x)$. Pochodną tej funkcji możemy przybliżyć za pomocą ilorazu różnicowego:
+$$f^{'}(x)\approx \frac{\sin(x+h)-\sin(x)}{h}$$ 
+dla małych wartości $h$. Dla $h=10^{-n}$ ($n=1,\ldots,16)$ i $x=1$ wyznacz błąd tego przybliżenia. Dla jakiej wartości $h$ otrzymane przybliżenie jest najlepsze? Zilustruj wyniki na wykresie, na którym wartości błędu będą prezentowane w skali logarytmicznej.
+
+\item (* 2 pkt) Niech $f(x)=\cos (x)-1=-2\sin^2(\frac{x}{2})$. Oblicz wartość podanej funkcji stosując oba podane wzory dla $1000$ wartości $x$ równomiernie rozlożonych w $ (-10^{-7},10^{-7})$ i zilustruj otrzymane wyniki na wykresie. Który wzór wydaje się lepszy? Spróbuj wyjaśnić, dlaczego tak jest.\\
+Oba wykresy powinny być narysowane w jednym oknie i rozróżnialne (poprzez zastosowanie różnych kolorów lub stylów linii). Ponadto, proszę umieścić przy wykresach legendę.
+
+\item (* 2 pkt) Rozważmy wielomian $w(x)=(x-1)^4=x^4-4x^3+6x^2-4x+1$. Oblicz stosując oba podane wzory wartość tego wielomianu dla $100$ wartości $x$ równomiernie rozłożonych w przedziale $(0.9999,1.0001)$ i zilustruj otrzymane wyniki na wykresie. Który wzór wydaje się lepszy? Spróbuj wyjaśnić, dlaczego tak jest.\\
+Oba wykresy powinny być narysowane w jednym oknie i rozróżnialne (poprzez zastosowanie różnych kolorów lub stylów linii). Ponadto, proszę umieścić przy wykresach legendę.
+\end{enumerate}
+
+\section*{Algorytm Hornera}
+
+Zauważmy, że wielomian o naturalnej postaci:
+$$w(x)=\sum_{i=0}^na_ix^i$$
+można także zapisać jako:
+$$w(x)=(\ldots((a_nx+a_{n-1})x+a_{n-2})x+\ldots+a_1)x+a_0.$$
+Z postaci tej wynika sposób obliczania wartości wielomianu w punkcie zwany algorytmem Hornera. Załóżmy, że chcemy obliczyć wartość wielomianu $w(x)$ w punkcie $x_0$. Definiujemy:
+\begin{eqnarray}
+	w_n&=&a_n,\nonumber\\
+	w_i&=&w_{i+1}x_0+a_i,\; \text{dla}\;i=n-1,n-2,\ldots,0\nonumber
+\end{eqnarray}
+Wtedy $w(x_0)=w_0$. Obliczając wartość wielomianu w punkcie w ten sposób ograniczamy liczbę mnożeń.\\
+Stosując algorytm Hornera możemy także obliczyć wynik dzielenia wielomianu $w(x)$ przez dwumian $x-c$. Jeśli bowiem
+$$\sum_{i=0}^na_ix^i=(\sum_{i=0}^{n-1}b_{i+1}x^i)(x-c)+b_0,$$
+to porównując współczynniki przy odpowiednich potęgach otrzymujemy zależność $a_i=b_i-b_{i+1}c$ dla $i=0,\ldots,n-1$ i $a_n=b_n$. Oznacza to, że $b_i=w_i$ dla $i=0,\ldots,n$.\\
+Kolejnym zastosowaniem algorytmu Hornera jest obliczanie wartości pochodnych znormalizowanych w punkcie $x_0$, tzn. wartości:
+$$\frac{w^{(j)}(x_0)}{j!} \text{ dla } j=0,1,\ldots,n.$$
+Zapiszmy wielomian $w(x)$ w postaci:
+$$w(x)=(x-x_0)^jv(x)+r(x),$$
+gdzie $r(x)$ jest wielomianem o stopniu mniejszym od $j$. Różniczkując to wyrażenie $j$ razy i obliczając jego wartość w punkcie $x_0$ otrzymujemy równość:
+$$w^{(j)}(x_0)=j!v(x_0).$$
+Zatem chcąc obliczyć wartość $j$-tej pochodnej znormalizowanej wielomianu wystarczy zastosować algorytm Hornera $j$ razy, żeby podzielić kolejno otrzymywane ilorazy przez $x-x_0$, a następnie obliczyć wartość otrzymanego wielomianu w punkcie $x_0$.\\
+Ostatnim omawianym zastosowaniem algorytmu Hornera będzie zamiana liczby zapisanej w systemie pozycyjnym o podstawie $p$ ($p\neq 10$) na zapis w systemie dziesiętnym. Rozważmy liczbę zapisaną w systemie pozycyjnym o podstawie $p$:
+$$c_nc_{n-1}\ldots c_1c_0 \;_{(p)}=c_np^n+c_{n-1}p^{n-1}+\ldots+c_1p+c_0.$$
+Zatem chcąc obliczyć wartość tej liczby w systemie dziesiętnym wystarczy obliczyć wartość wielomianu $w(x)=\sum_{i=0}^nc_ix^i$ w punkcie $p$.\\
+Wielomian możemy też zapisać w tzw. postaci Newtona:
+\begin{align*}
+	w(x)= \sum_{k=0}^n b_k\prod_{j=0}^{k-1}(x-x_j)=b_0+b_1(x-x_0)+b_2(x-x_0)(x-x_1)+\ldots+b_n(x-x_0)\cdot\ldots\cdot (x-x_{n-1})
+\end{align*}
+Mając dany wielomian w tej postaci możemy w łatwy sposób obliczyć jego wartość w punkcie $s$ korzystając z uogólnionego schematu Hornera:
+\begin{eqnarray*}
+	p_n&=&b_n\\
+	p_i&=&p_{i+1}( s-x_i)+b_i, \text{ dla }i=n-1,n-2,\ldots,0
+\end{eqnarray*}
+
+\subsection*{Zadania}
+
+\begin{enumerate}
+ \item Stosując polecenie \emph{horner} oblicz wartość wielomianu $w(x)$ w punkcie $x_0$ dla:
+	\begin{enumerate}
+		\item $w(x)=x^3-2x^2+3x-4$, $x_0=1$,
+		\item $w(x)=8x^3+5x^2+3x+1$, $x_0=-3$.
+	\end{enumerate}
+
+\item  Stosując polecenie \emph{pdiv} wyznacz wielomian będacy wynikiem dzielenia wielomianu $w(x)$ przez dwumian $d(x)$:
+\begin{enumerate}
+	\item $w(x)=2x^3+5x^2-4x+11$, $d(x)=x-2$,
+	\item $w(x)=x^4-9x^2+3x-5$, $d(x)=x+7$.
+\end{enumerate}
+
+\item Używając poleceń \emph{horner} i \emph{pdiv}, znajdź wszystkie pochodne znormalizowane  wielomianu $w(x)$ w punkcie $x_0$:
+\begin{enumerate}
+	\item $w(x)=x^3+2x^2+4x+8$, $x_0=-2$,
+	\item $w(x)=x^4-x^3+3x-1$, $x_0=2$
+\end{enumerate}
+
+
+\item (* 3 pkt) Napisz funkcję, która dla danej liczby $p$ ($2\leq p \leq 9$) i liczby zapisanej w systemie pozycyjnym o podstawie $p$ oblicza jej wartość w systemie dziesiętnym wykorzystując algorytm Hornera.  Zakładamy, że dane wejściowe do funkcji są podane w postaci pary $(c,p)$, gdzie $p$ jest liczbą naturalną z zakresu od $2$ do $9$, a $c$ jest wektorem kolejnych cyfr w zapisie pozycyjnym danej liczby, przy czym pierwsza współrzędna odpowiada współczynnikowi przy potędze liczby $p$ o wykładniku $0$.  Przetestuj tę funkcję na poniższych przykładach:
+\begin{enumerate}
+	\item $([5,4,3,2,1],6)$,
+	\item $([8,5,3,2,1,1],9)$,
+	\item $([0,1,0,1,1,0,1],2)$.
+\end{enumerate}
+Uwaga! Proszę nie używać wbudowanej funkcji \emph{horner}.
+
+\item (* 4 pkt) Napisz funkcję, która korzystając z uogólnionego schematu Hornera dla wektora $n$ różnych punktów $x=[x_0,x_1,\ldots,x_{n-1}]$, wektora $b=[b_0,b_1,\ldots,b_n]$  współczynników wielomianu wielomianu $w$ danego w postaci Newtona i wektora punktów $s=[s_1,s_2,\ldots,s_k]$ zwraca wektor wartości tego wielomianu interpolacyjnego w punktach $s_1,s_2,\ldots,s_k$. Przetestuj tę funkcję dla następujących danych:
+\begin{enumerate}
+	\item $x=[2,4,6,8,10]$, $b=[-1,1,2,3,-4,1]$, $s=[3,5,7,9]$,
+	\item $x=[0,0,-1,-1,-1,-2]$, $b=[3,-3,3,-3,2,0,2]$, $s=[-1,-2,0,-1.5,-2.75,5]$.
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
