@@ -1,0 +1,48 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts} 
+\theoremstyle{definition}
+\newtheorem{thm}{Twierdzenie}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{enumerate}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+
+
+\begin{document}
+
+\section*{Interpolacja wielomianowa}
+
+
+\subsection*{Zadania}
+\begin{enumerate}
+	
+\item Napisz funkcję, która dla zadanego wielomianu $w$, wektora węzłów $(x_0,x_1,\ldots, x_n)$ oraz wektora odpowiadających im wartości $(y_0,y_1,\ldots,y_n)$ sprawdza, czy podany wielomian jest wielomianem Lagrange'a interpolującym te dane.
+
+
+\item (* 4 pkt) Napisz funkcję, która dla wektora $n+1$ różnych punktów $(x_0,x_1,\ldots,x_n)$ i wartości pewnej funkcji $f$ w tych punktach zwraca wektor $(b_0,b_1,\ldots,b_n)$  współczynników wielomianu interpolacyjnego Lagrange'a funkcji $f$ w postaci Newtona opartego na węzłach $x_0,x_1,\ldots,x_n$.
+
+
+
+\item (* 3 pkt) Napisz funkcję, która dla danych liczb rzeczywistych $a,b$ ($a<b$) i liczby naturalnej $n$ oblicza wartości $n+1$ węzłów Czebyszewa w przedziale $[a,b]$, czyli wartości:
+$$x_j=\frac{b-a}{2}\cos(\frac{2j+1}{2n+2}\pi)+\frac{a+b}{2} \text{ dla } j=0,1,\ldots,n.$$
+
+\item (* 2 pkt) Rozważmy funkcję $f(x)=\frac{1}{1+x^2}$ w przedziale $I=[-5,5]$.
+\begin{enumerate}
+	\item Znajdź współczynniki $b_i$ wielomianu interpolacyjnego Lagrange'a tej funkcji opartego na $6$ równoodległych węzłach w przedziale $I$.
+	\item Znajdź współczynniki $b_i$ wielomianu interpolacyjnego Lagrange'a tej funkcji opartego na $11$ równoodległych węzłach w przedziale $I$.
+	\item Narysuj w jednym oknie wykresy funkcji $f$ i dwóch obliczonych w poprzednich podpunktach wielomianów interpolacyjnych tej funkcji w przedziale $I$.
+\end{enumerate}
+
+\item (* 2 pkt) Dla funkcji $f$ z poprzedniego zadania wyznacz współczynniki wielomianów interpolacyjnych Lagrange'a w postaci Newtona opartych na $6$ i $11$ węzłach Czebyszewa w przedziale $[-5,5]$. Następnie narysuj w jednym oknie wykresy tych wielomianów i wyjściowej funkcji w tym przedziale.
+
+
+
+\end{enumerate}
+
+
+
+
+\end{document}
