@@ -1,0 +1,119 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts} 
+\theoremstyle{definition}
+\newtheorem{thm}{Twierdzenie}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{enumerate}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+
+
+\begin{document}
+
+	\section*{Całkowanie numeryczne}
+Niech $f$ będzie funkcją określoną na przedziale $[a,b]$. Oznaczmy przez $I(f)$ całkę oznaczoną Riemanna tej funkcji na $[a,b]$:
+$$I(f)=\int_a^bf(x)dx$$
+Będziemy przybliżać wartości takich całek za pomocą sum:
+$$S(f)=\sum_{i=0}^n A_if(x_i),$$
+gdzie $x_i\in [a,b]$ i $A_i$ są pewnymi współczynnikami. Wzory tego typu nazywamy kwadraturami.\\
+Jednym ze sposobów wyznaczenia przybliżonej wartości całki z danej funkcji jest zastąpienie tej funkcji przez jej wielomian interpolacyjny. Zauważmy, że jeśli $L_n(x)=\sum_{i=0}^n f(x_i)l_i(x)$ jest wielomianem interpolacyjnym funkcji $f$ opartym na węzłach $x_0,x_1,\ldots,x_n\in [a,b]$, to:
+$$\int_a^bL_n(x)dx=\int_a^b\sum_{i=0}^n f(x_i)l_i(x)dx=\sum_{i=0}^n f(x_i)\int_a^bl_i(x)dx.$$
+Zatem otrzymujemy kwadraturę postaci $S(f)=\sum_{i=0}^nA_if(x_i)$, gdzie $A_i=\int_a^bl_i(x)$. Jeżeli założymy, że węzły $x_i$ są równoodległe (tzn. $x_i=a+ih,\, h=\frac{b-a}{n}$), to z prostych przekształceń wynika, że $A_i=h\int_0^n\prod_{j=0,j\neq i}^n\frac{t-j}{i-j}dt$ oraz $A_i=A_{n-i}$ dla $i=0,1,\ldots,n$. Kwadratury, które wtedy otrzymujemy nazywamy kwadraturami Newtona-Cotesa.\\
+Przykładowe kwadratury Newtona-Cotesa:
+\begin{itemize}
+	\item wzór trapezów: $S_T(f)=\frac{b-a}{2}(f(a)+f(b)).$ Dla funkcji $f\in C^2[a,b]$ błąd w tym przypadku szacujemy przez $R_T(f)=I(f)-S_T(f)=-\frac{(b-a)^3}{12}f''(\xi)$
+	dla pewnego $\xi\in (a,b)$.
+	\item wzór parabol/Simpsona: $S_S(f)=\frac{b-a}{6}\left(f(a)+4f\left(\frac{a+b}{2}\right)+f(b)\right).$ Dla funkcji $f\in C^4[a,b]$ błąd tego wzoru szacujemy przez
+	$R_S(f)=I(f)-S_S(f)=-\frac{1}{90}\left(\frac{b-a}{2}\right)^5f^{(4)}(\xi)$
+	dla pewnego $\xi\in (a,b)$.
+\end{itemize}
+%Biorąc trzy węzły $a, \frac{a+b}{2},b$ otrzymujemy wzór Simpsona zwany też wzorem parabol:
+%$$S_S(f)=\frac{b-a}{6}\left(f(a)+4f\left(\frac{a+b}{2}\right)+f(b)\right)$$
+W celu zmniejszenia błędu w całkowaniu numerycznym będziemy stosować tzw. złożone kwadratury Newtona-Cotesa. Powstają one przez podział przedziału $[a,b]$ na $N$ równych części i zastosowanie na każdym z podprzedziałów wzoru na kwadraturę Newtona-Cotesa niskiego rzędu. Przykładowo:
+\begin{itemize}
+	\item złożony wzór trapezów:
+	$S_{ZT}(f)=\frac{b-a}{2N}\left(f(a)+f(b)+2\sum_{i=1}^{N-1}f(a+ih)\right),$ gdzie
+	$h=\frac{b-a}{N}$ (błąd przybliżenia dla funkcji $f\in C^2[a,b]$: $-\frac{h^2}{12}(b-a)f''(\xi)$). 
+	\item złożony wzór Simpsona: $S_{ZS}(f)=\frac{h}{6}\left(f(a)+2\sum_{i=1}^{N-1}f(a+ih)+4\sum_{i=0}^{N-1}f(a+ih+\frac{h}{2})+f(b)\right),$ gdzie $h=\frac{b-a}{N}$ (błąd przybliżenia dla funkcji $f\in C^4[a,b]$: $-\left(\frac{h}{2}\right)^4\frac{(b-a)}{180}f^{(4)}(\xi)$).
+\end{itemize}
+
+
+\subsection*{Zadania}
+\begin{enumerate}
+	
+	
+	\item Znajdź wartości powyższych całek używając funkcji \emph{inttrap} dla dwóch, trzech i 5 węzłów
+	\begin{enumerate}
+		\item $\int_{0}^4 \frac{x}{x^2+12}dx$,
+		\item $\int_0^{\frac{\pi}{2}}x^2\sin xdx$,
+		\item $\int_1^{3}2^{x^2-3x+1}dx$,
+	\end{enumerate}
+	Oszacuj błąd otrzymanych przybliżeń.
+	
+	
+	
+	
+	\item (3 pkt) Napisz funkcję \emph{Simpson}, która dla danej funkcji $f$ oraz liczb $a$, $b$ będacych krańcami pewnego przedziału i liczby naturalnej $N$ wylicza przybliżoną wartość całki $\int_a^b f(x)dx$ stosując złożoną kwadraturę Simpsona i podział przedziału $[a,b]$ na $N$ równych części.
+	
+	\item (2 pkt) Oblicz wartości poniższych całek, używając złożonych wzorów trapezów i Simpsona dla $N\in \{2,3,\ldots,10\}$. Oblicz błędy względne otrzymanych przybliżeń. Dla każdej z tych całek narysuj na jednym wykresie błędy otrzymane w wyniku stosowania obu tych wzorów w zależności od $N$. Zastosuj skalę logarytmiczną dla tych wartości. Dodaj tytuł i legendę do wykresów.
+	\begin{enumerate}
+		\item $\int_2^5 \frac{\ln\ln x}{x}dx$,
+		\item $\int_0^1\frac{1}{1+x^2}dx$.
+	\end{enumerate}
+\end{enumerate}
+
+\newpage
+	\section*{Rozwiązywanie równań nieliniowych}
+Załóżmy, że mamy dane równanie nieliniowe $f(x)=0$, gdzie $f$ jest pewną funkcją rzeczywistą. Aby znaleźć przybliżone rozwiązanie tego równania możemy wykorzystać jedną z przedstawionych poniżej metod iteracyjnych.
+\subsection*{Metoda bisekcji}
+Załóżmy, że $f$ jest funkcją ciągłą w przedziale $[a,b]$ oraz $f(a)f(b)<0$. Wtedy na pewno przedział ten zawiera miejsce zerowe tej funkcji, tzn. $f(c)=0$ dla pewnego $c\in [a,b]$. Aby znaleźć miejsce zerowe funkcji $f$ możemy posłużyć się następującym algorytmem:\\
+$y_0=a,z_0=b$,\\
+dla $k=0,1,2,\ldots$\\
+$x_k=\frac{y_k+z_k}{2}$,\\
+jeżeli $f(x_k)f(y_k)<0$, to $y_{k+1}=y_k,z_{k+1}=x_k$,\\
+jeżeli $f(x_k)f(z_k)<0$, to $y_{k+1}=x_k,z_{k+1}=z_k$.\\
+Algorytm kończymy, gdy uzyskamy wystarczająco dobre przybliżenie miejsca zerowego funkcji $f$.
+\subsection*{Metoda Newtona}
+Załóżmy, że funkcja $f$ jest różniczkowalna. Wtedy miejsca zerowego funkcji $f$ możemy szukać stosując następujący algorytm:\\
+dla $k=0,1,2,\ldots$\\
+$x_{k+1}=x_k-\frac{f(x_k)}{f^{'}(x_k)}$,\\
+gdzie punkt $x_0$ może być dowolny. Geometrycznie odpowiada to szukaniu miejsca zerowego stycznej do wykresu funkcji $f$ w punkcie $x_k$. Dlatego metodę Newtona nazywamy też metodą stycznych.\\
+Ciąg punktów otrzymanych przy użyciu tej metody nie zawsze musi być zbieżny do miejsca zerowego funkcji $f$. Mamy jednak następujące twierdzenie:
+\begin{thm}
+	Niech $r$ będzie zerem pojedynczym funkcji $f$ i niech $f$ będzie dwukrotnie różniczkowalna w sposób ciągły. Wtedy istnieje takie otoczenie $D$ punktu $r$, że jeśli $x_0\in D$, to ciąg $x_0,x_1,x_2,\ldots$ jest zbieżny do punktu $r$.
+\end{thm}
+\subsection*{Metoda siecznych}
+Dla danej funkcji $f$ wybierzmy takie punkty $x_0$ i $x_1$, że $f(x_0)\neq f(x_1)$. Następnie konstuujemy ciąg $x_0,x_1,x_2,\ldots$ korzystając ze wzoru:\\
+$x_{k+1}=x_k-\frac{x_k-x_{k-1}}{f(x_k)-f(x_{k-1})}f(x_k)$.\\
+Geometrycznie odpowiada to znalezieniu zera siecznej poprowadzonej przez punkty $(x_{k-1},f(x_{k-1}))$ oraz $(x_k,f(x_k))$.
+\subsection*{Kryteria stopu}
+Przy decyzji o tym, ile kroków danej metody wykonać możemy zastosować jedno z następujących kryteriów:
+\begin{itemize}
+	\item $k> M$ dla pewnej ustalonej liczby $M$,
+	\item $|f(x_k)|<\delta$ dla ustalonej wartości $\delta$,
+	\item $|x_k-x_{k+1}|<\varepsilon$ dla pewnej ustalonej wartości $\varepsilon$.
+\end{itemize}
+
+
+
+\subsection*{Zadania}
+\begin{enumerate}
+	
+	
+	\item (3 pkt) Napisz funkcję \emph{bisekcja}, która dla danych punktów $a,b$, funkcji $f$ i parametrów związanych z kryteriami stopu $M,\delta,\varepsilon$ znajduje przybliżenie zera tej funkcji w przedziale $[a,b]$ metodą bisekcji.
+	
+	\item (3 pkt) Napisz funkcję \emph{styczne}, która dla danego punktu $x_0$, funkcji $f$ i parametrów związanych z kryteriami stopu $M,\delta,\varepsilon$ znajduje przybliżenie zera tej funkcji metodą Newtona.
+	
+	\item (3 pkt) Napisz funkcję \emph{sieczne}, która dla danych punktów $x_0,x_1$, funkcji $f$ i parametrów związanych z kryteriami stopu $M,\delta,\varepsilon$ znajduje przybliżenie zera tej funkcji metodą siecznych.
+	
+	\item (2 pkt) Znajdź przybliżoną wartość $\sqrt[4]{4}$ stosując metody bisekcji, stycznych i siecznych z dokładnością $\varepsilon\in\{2^{-5},2^{-6},\ldots,2^{-15}\}$. Porównaj szybkość zbieżności (liczbę iteracji) potrzebnych do uzyskania zadowalającego przybliżenia w zależności od $\varepsilon$. Przedstaw wyniki na wykresie. Do wykresu dodaj tytuł i legendę.
+	
+
+\end{enumerate}
+
+
+
+\end{document}
