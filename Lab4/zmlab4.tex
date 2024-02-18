@@ -1,0 +1,144 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts} 
+\theoremstyle{definition}
+\newtheorem{twie}{Twierdzenie}
+\newtheorem{de}{Definicja}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{enumerate}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+
+
+\begin{document}
+
+	\section*{Rozwiązywanie układów równań liniowych i rozkład LU}
+Aby znaleźć rozkład LU macierzy możemy posłużyć się  algorytmem Doolittle'a, w którym zakładamy dodatkowo, że $l_{ii}=1$ dla każdego $i=1,2,\ldots,n$. Algorytm ten możemy zapisać następująco:\\
+Dla $k=1,2,\ldots,n$:\\
+\hspace*{0.5cm} $l_{kk}=1$\\
+\hspace*{0.5cm} Dla $j=k,k+1,\ldots,n$:\\
+\hspace*{1cm} $u_{kj}=a_{kj}-\sum_{s=1}^{k-1}l_{ks}u_{sj}$\\
+\hspace*{0.5cm} Dla $i=k+1,k+2,\ldots,n$:\\
+\hspace*{1cm} $l_{ik}=(a_{ik}-\sum_{s=1}^{k-1}l_{is}u_{sk})/u_{kk}$
+
+
+\subsection*{Zadania}
+\begin{enumerate}
+	
+	\item Używając polecenia $lu$ znajdź rozkład LUP poniższych macierzy:
+	\begin{enumerate}
+		\item $A=\left[\begin{array}{ccc}1&3&5\\2&7&9\\3&8&7\end{array}\right]$,
+		\item $A=\left[\begin{array}{ccc}3&1&2\\5&2&3\\-1&-1&-1\end{array}\right]$,
+		\item $A=\left[\begin{array}{cccc}-1&-5&-3&-4\\1&6&4&5\\1&9&6&7\\1&9&7&6\end{array}\right]$.
+	\end{enumerate}
+	
+	
+	\item (* 2,5 pkt) Napisz funkcję Doolittle, która dla zadanej macierz $\pmb{A}$ znajduje jej rozkład LU, używając algorytmu Doolittle'a.
+	
+	
+	
+		\item (* 2,5 pkt) Napisz funkcję, która dla macierzy $A$, wektora $b$, wektora początkowego $x0$ i parametrów związanych z kryteriami stopu rozwiązuje układ równań liniowych $Ax=b$ za pomocą metody Jacobiego.
+		
+		\item (* 2,5 pkt) Napisz funkcję, która dla macierzy $A$, wektora $b$, wektora początkowego $x0$ i parametrów związanych z kryteriami stopu rozwiązuje układ równań liniowych $Ax=b$ za pomocą metody Gaussa-Seidela.
+		
+		\item (* 2,5 pkt) Napisz funkcję, która dla macierzy $A$, wektora $b$, wektora początkowego $x0$, parametru $\omega$ i parametrów związanych z kryteriami stopu rozwiązuje układ równań liniowych $Ax=b$ za pomocą metody nadrelaksacji.
+		
+		\end{enumerate}
+
+\newpage
+	\section*{Rozkład macierzy według wartości szczególnych (SVD)}
+	Niech $A=[a_{ij}]_{1\leq i\leq m,1\leq j\leq n}$ będzie macierzą rozmiaru $m\times n$ o wartościach zespolonych. Przypomnijmy kilka pojęć związanych z macierzami.
+	\begin{de}
+		\begin{enumerate}
+			\item Macierz $A^t=[a_{ji}]_{1\leq j\leq n,1\leq i\leq m}$ nazywamy macierzą transponowaną,
+			\item Macierz $A^*=[\overline{a_{ij}}]_{1\leq j\leq n,1\leq i\leq m}$ nazywamy macierzą sprzężoną.
+			\item Jeżeli $A=A^t$, to macierz $A$ nazywamy symetryczną.
+			\item Jeżeli $A=A^*$, to macierz $A$ nazywamy samosprzężoną.
+			\item Jeżeli $A^{-1}=A^*$, to macierz $A$ nazywamy unitarną.
+		\end{enumerate}
+	\end{de}
+	Rozkład SVD pozwala nam rozłożyć dowolną macierz na macierz diagonalną i macierze unitarne.
+	\begin{twie}
+		Dowolną macierz $A$ o elementach zespolonych i wymiarach $m\times n$ możemy przedstawić w postaci $V\Sigma U^*$, gdzie $V$ jest macierzą unitarną o wymiarach $m\times m$, $\Sigma$ jest macierzą diagonalną o wymiarach $m\times n$, a $U$ jest macierzą unitarną o wymiarach $n\times n$.
+	\end{twie}
+	Macierze $V,\Sigma$ oraz $U$ możemy znale\'zć w następujący sposób
+	\begin{enumerate}
+		\item Obliczamy macierz $B=A^*A$.
+		\item Obliczamy wartości własne macierzy $B$. Można pokazać, że wszystkie te wartości są nieujemne. Oznaczmy je jako $\sigma_1^2,\sigma_2^2,\ldots,\sigma_n^2$, przy czym zakładamy, że $\sigma_1\geq \sigma_2\geq \ldots \geq \sigma_r>\sigma_{r+1}=\ldots=\sigma_n=0$.
+		\item Obliczamy wektory własne $u_1,\ldots,u_n$ macierzy $B$ (tzn. takie wektory, że $Bu_i=\sigma_i^2u_i$), dobierając je w taki sposób, aby tworzyły układ ortonormalny (tzn. $<u_i,u_i>=1$ i $<u_i,u_j>=0$ dla $i\neq j$, gdzie $<.,.>$ oznacza iloczyn skalarny).
+		\item Definiujemy wektory $v_i=\frac{1}{\sigma_i}Au_i$ dla $i=1,\ldots,r$. Jeżeli $r<m$, to definiujemy dodatkowo wektory $v_{r+1},\ldots,v_m$ w taki sposób, aby układ $\{v_1,\ldots,v_m\}$ był bazą ortonormalną.
+		\item Macierz $\Sigma$ tworzymy w następujący sposób: na główną przekątną wpisujemy kolejno, od pierwszego wiersza liczby $\sigma_1,\sigma_2,\ldots,\sigma_r$ i uzupełniamy ją zerami.
+		\item Macierz $V$ tworzymy wpisując do jej kolejnych kolumn wektory $v_1,\ldots,v_m$.
+		\item Macierz $U$ tworzymy wpisując do jej kolejnych kolumn wektory $u_1,\ldots,u_n$.
+	\end{enumerate}
+	Liczby $\sigma_1,\sigma_2,\ldots, \sigma_n$ nazywamy \emph{wartościami szczególnymi macierzy $A$}, a podany rozkład $V\Sigma U^*$ rozkładem maierzy $A$ względem wartości szczególnych. Zwróćmy uwagę, że rozkład ten nie jest jednoznaczny.\\
+	\subsection*{Liniowe zagadnienie najmniejszych kwadratów}
+	Jednym z zastosowań rozkładu SVD jest związane z układami równań. Niech $Ax=b$ będzie układem równań, przy czym układ ten może być sprzeczny lub zawierać wiele rozwiązań. 
+	\begin{de}
+		Niech $A$ będzie macierzą zespoloną o wymiarach $m\times n$, a $b$ wektorem zespolonym o wymiarach $m\times 1$.Rozwiązaniem minimalnym układu równań $Ax=b$ nazywamy wektor $x$ ze zbioru $\{x:\|Ax-b\|_2=\rho\}$ o najmniejszej normie euklidesowej, gdzie $\rho=\min_{x\in \mathbb{C}^n}\|Ax-b\|_2$.
+	\end{de}
+	Szukając rozwiązania minimalnego układu $Ax=b$ możemy posłużyć się pseudoodwrotnością macierzy $A$.
+	\begin{de}
+		Niech $A$ będzie macierzą zespoloną o wymiarach $m\times n$. Pseudoodwrotnością macierzy $A$ nazywamy macierz  $A^+$ spełniającą następujące warunki
+		\begin{enumerate}
+			\item $AA^+A=A$,
+			\item $A^+AA^+=A^+$,
+			\item $(AA^+)^*=AA^+$,
+			\item $(A^+A)^*=A^+A$.		
+		\end{enumerate}
+	\end{de}
+	Znając rozkład SVD macierzy $A$ możemy w łatwy sposób policzyć jej odwrotność jako $A^+=U\Sigma^+V*$, gdzie $\Sigma^+$ powstaje z macierzy $\Sigma$ przez jej transponowanie i zastąpienie jej niezerowych wartości ich odwrotnościami. 
+	\begin{twie}
+		Rozwiąaniem minimalnym układu $Ax=b$ jest wektor $x=A^+b$.
+	\end{twie}
+	
+	\section*{Zadania}
+	\begin{enumerate}
+		%	\item Znajd\'z rozkład względem wartości szczególnych macierzy $A$, jeżeli:
+		%	\begin{enumerate}
+			%		\item $A=\left[\begin{array}{ccc}5 & 0 &0\\
+				%		0 & 4 & 0\\
+				%		0 & 0 & 0\\
+				%		0 & 0 & 0\\
+				%		0 & 0 & 0\end{array}\right]$
+			%		\item $A=[4\;\; 3]$
+			%		\item $A=\left[\begin{array}{ccc}
+				%		0 & -1.6 & 0.6\\
+				%		0 & 1.2 & 0.8\\
+				%		0 &0 & 0\\
+				%		0 & 0 & 0\end{array}\right]$
+			%	\end{enumerate}
+		%
+		%\item Znajd\'z macierze pseudoodwrotne do macierzy $A$ z pierwszego zadania.
+		%
+		%\item Znajd\'z rozwiązanie minimalne układu równań $Ax=b$, gdzie $A$ jest macierzą z podpunktu c) z zadania pierwszego, a $b=[2,3,-2,5]^t$.
+		
+		\item Korzystając z funkcji \emph{svd} w Scilabie znajd\'z rozwiązania minimalne poniższych układów równań:
+		\begin{enumerate}
+			\item $\begin{cases}
+				x_1+x_2=3\\
+				x_1+x_2=6
+			\end{cases}$,
+			\item $\begin{cases}
+				x_1+3x_2+4x_3=5\\
+				-2x_1-6x_2-8x_3=-10
+			\end{cases}$.	
+		\end{enumerate}
+	\emph{Uwaga!} Polecenie $[V,S,U]=svd(A)$ zwraca macierze $V,S,U$ takie, że $A=VSU^{*}$.
+		
+		\item (* 2 pkt)\begin{enumerate}
+			\item Wygeneruj wektor $x$ $50$ równomiernie rozłożonych punktów w przedziale $[1,10]$.
+			\item Wygeneruj wektor $a$ 50 losowo wybranych punktów z przedziału $[2,3]$.
+			\item Wygeneruj wektor $b$ 50 losowo wybranych punktów z przedziału $[-1,0]$.
+			\item Narysuj wykres $y=b.*x^2+a.*x$.
+			\item Za pomocą SVD znajd\'z wielomian $f(x)=b_0x^2+a_0x$, który najlepiej aproksymuje punkty $(x,y)$ i narysuj jego wykres.
+		\end{enumerate}
+		
+		
+\end{enumerate}
+
+
+
+\end{document}
